@@ -33,19 +33,23 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (IsGrounded() && Input.GetKeyDown(KeyCode.Space))
+        if (IsGrounded())
         {
-            reverseGravity = true;
-        }
-        else if (IsGrounded() && Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            
-            if (Input.GetTouch(0).phase == TouchPhase.Began &&
-                GameManager.gameIsActive &&
-                !RectTransformUtility.RectangleContainsScreenPoint(pauseButtonRectTF, touch.position))
-            { 
+            // a quick fix for debugging w/o a smartphone
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
                 reverseGravity = true;
+            }
+            else if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+
+                if (touch.phase == TouchPhase.Began &&
+                    GameManager.gameIsActive &&
+                    !RectTransformUtility.RectangleContainsScreenPoint(pauseButtonRectTF, touch.position))
+                {
+                    reverseGravity = true;
+                }
             }
         }
     }
