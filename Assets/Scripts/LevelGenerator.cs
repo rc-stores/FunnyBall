@@ -2,34 +2,32 @@ using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 { 
-    [SerializeField] private Transform platform;
-    [SerializeField] private PlayerController player;
-    [SerializeField] private Transform lastLowerPlatform;
-    [SerializeField] private Transform lastUpperPlatform;
+    [SerializeField] private Transform platformPrefabTF;
+    [SerializeField] private Transform lastLowerPlatformTF;
+    [SerializeField] private Transform lastUpperPlatformTF;
 
     private DifficultyController difficulty;
     private PlatformScaler scaler;
 
     private Vector3 spawnStart;
-    private readonly Vector3 verticalOffset = new Vector3(0, 14f, 0);
+    private readonly Vector3 VERTICAL_OFFSET = new Vector3(0, 14f, 0);
 
     public Vector3 GetVerticalOffset()
     {
-        return verticalOffset;
+        return VERTICAL_OFFSET;
     }
 
     void Start()
     {
-        spawnStart = lastLowerPlatform.position; // must be immutable from now. how to do that w/o c-tor and readonly modifier?
+        spawnStart = lastLowerPlatformTF.position; // must be immutable from now. how to do that w/o c-tor and readonly modifier?
         difficulty = GetComponent<DifficultyController>();
         scaler = GetComponent<PlatformScaler>();
     }
 
     void Update()
     {
-        if (lastLowerPlatform.position.x <= spawnStart.x) {
+        if (lastLowerPlatformTF.position.x <= spawnStart.x) {
             SpawnLevelPart();
-            Debug.Log(GetEndPosition(lastLowerPlatform));
         }
     }
 
@@ -47,7 +45,7 @@ public class LevelGenerator : MonoBehaviour
     private Vector3 CalculateUpperScale(in Vector3 spawnPos, in Vector3 gapScale)
     {
         // max length is a distance to the last platform minus minimal gap length
-        float maxLength = 2 * (Vector3.Distance(GetEndPosition(lastUpperPlatform), spawnPos) - scaler.GetRequiredGapLength());
+        float maxLength = 2 * (Vector3.Distance(GetEndPosition(lastUpperPlatformTF), spawnPos) - scaler.GetRequiredGapLength());
 
         if (maxLength < gapScale.x)
         {
@@ -58,31 +56,31 @@ public class LevelGenerator : MonoBehaviour
 
     private void SpawnUpperPlatform(in Vector3 gapScale) 
     {
-        Vector3 spawnPosition = GetEndPosition(lastLowerPlatform) + verticalOffset + gapScale / 2;
+        Vector3 spawnPosition = GetEndPosition(lastLowerPlatformTF) + VERTICAL_OFFSET + gapScale / 2;
 
-        float maxLength = 2 * (Vector3.Distance(GetEndPosition(lastUpperPlatform), spawnPosition) - scaler.GetRequiredGapLength());
+        float maxLength = 2 * (Vector3.Distance(GetEndPosition(lastUpperPlatformTF), spawnPosition) - scaler.GetRequiredGapLength());
         if (maxLength < gapScale.x)
         {
             maxLength = gapScale.x;
         }
          
-        Spawn(out lastUpperPlatform, spawnPosition, scaler.ProducePlatformScale(gapScale.x, maxLength));
+        Spawn(out lastUpperPlatformTF, spawnPosition, scaler.ProducePlatformScale(gapScale.x, maxLength));
     }
 
     private void SpawnLowerPlatform(in Vector3 gapScale)
     {
-        float minLength = (lastUpperPlatform.localScale / 2 - gapScale / 2).x + 2.5f;
+        float minLength = (lastUpperPlatformTF.localScale / 2 - gapScale / 2).x + 2.5f;
         Vector3 platformScale = scaler.ProducePlatformScale(minLength);
 
-        Vector3 spawnPosition = GetEndPosition(lastLowerPlatform) + gapScale;
+        Vector3 spawnPosition = GetEndPosition(lastLowerPlatformTF) + gapScale;
         spawnPosition.x += platformScale.x / 2;
 
-        Spawn(out lastLowerPlatform, spawnPosition, platformScale);
+        Spawn(out lastLowerPlatformTF, spawnPosition, platformScale);
     }
 
     private void Spawn(out Transform lastPlatform, in Vector3 position, in Vector3 scale)
     {
-        lastPlatform = Instantiate(platform, position, Quaternion.identity, gameObject.transform);
+        lastPlatform = Instantiate(platformPrefabTF, position, Quaternion.identity, gameObject.transform);
         lastPlatform.localScale = scale;
     }
 }

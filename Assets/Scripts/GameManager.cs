@@ -3,10 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject pauseMenu;
-    [SerializeField] private GameObject gameOverMenu;
-
     public static bool gameIsActive { get; private set; }
+
+    [SerializeField] private GameObject pauseMenuGO;
+    [SerializeField] private GameObject gameOverMenuGO;
 
     // workaround for restarting the level
     private void Awake()
@@ -19,20 +19,20 @@ public class GameManager : MonoBehaviour
     {
         gameIsActive = false;
         Time.timeScale = 0;
-        pauseMenu.SetActive(true);
+        pauseMenuGO.SetActive(true);
     }
 
     public void Restart()
     {
         SceneManager.LoadScene("Game");
-        gameOverMenu.SetActive(false);
+        gameOverMenuGO.SetActive(false);
         gameIsActive = true;
     }
 
     public void Resume()
     {
         Time.timeScale = 1;
-        pauseMenu.SetActive(false);
+        pauseMenuGO.SetActive(false);
         gameIsActive = true;
     }
 
@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     {
         gameIsActive = false;
         Time.timeScale = 0;
-        gameOverMenu.SetActive(true);
+        gameOverMenuGO.SetActive(true);
     }
 
     public void Quit()

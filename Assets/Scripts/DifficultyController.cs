@@ -12,7 +12,7 @@ public class DifficultyController : MonoBehaviour
     [SerializeField] private float timeStep = 40; // the difficulty increases every 40 seconds
 
     private float time = 0;
-    private const int kMaxLevel = 5;
+    private const int MAX_LEVEL = 5;
 
     void Update()
     {
@@ -20,7 +20,7 @@ public class DifficultyController : MonoBehaviour
         // we can't compare a modulus with zero
         float oldModulus = time % timeStep;
         time += Time.deltaTime;
-        if (oldModulus > time % timeStep && level < kMaxLevel)
+        if (oldModulus > time % timeStep && level < MAX_LEVEL)
         {
             IncreaseDifficulty();
         }

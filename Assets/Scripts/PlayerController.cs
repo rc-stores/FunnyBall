@@ -3,11 +3,9 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private LayerMask layerMask;
-    [SerializeField] private GameObject level;
-    [SerializeField] private GameObject gameOverMenu;
-    [SerializeField] private GameObject scoreText;
-    [SerializeField] private RectTransform pauseButton;
+    [SerializeField] private LayerMask groundLayerMask;
+    [SerializeField] private GameObject levelGO;
+    [SerializeField] private RectTransform pauseButtonRectTF;
 
     [SerializeField] private float vericalGravityCoefficient = 800;
 
@@ -22,7 +20,7 @@ public class PlayerController : MonoBehaviour
     {
         Physics.gravity = new Vector3(0, vericalGravityCoefficient * gravitySign, 0);
         lowerPosition = transform.position;
-        upperPosition = lowerPosition + level.GetComponent<LevelGenerator>().GetVerticalOffset();
+        upperPosition = lowerPosition + levelGO.GetComponent<LevelGenerator>().GetVerticalOffset();
     }
 
     // Update is called once per frame
@@ -45,7 +43,7 @@ public class PlayerController : MonoBehaviour
             
             if (Input.GetTouch(0).phase == TouchPhase.Began &&
                 GameManager.gameIsActive &&
-                !RectTransformUtility.RectangleContainsScreenPoint(pauseButton, touch.position))
+                !RectTransformUtility.RectangleContainsScreenPoint(pauseButtonRectTF, touch.position))
             { 
                 reverseGravity = true;
             }
@@ -64,7 +62,7 @@ public class PlayerController : MonoBehaviour
     private bool IsGrounded()
     {
         // there is a little bug here: after falling in a gap there is a chance to reverse gravity and land on a platform "upside down"
-        return Physics.OverlapSphere(transform.position, transform.localScale.x / 2 + 0.1f, layerMask).Length > 0;
+        return Physics.OverlapSphere(transform.position, transform.localScale.x / 2 + 0.1f, groundLayerMask).Length > 0;
     }
 
     private void ReverseGravity()
