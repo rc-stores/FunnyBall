@@ -3,63 +3,63 @@ using Random = UnityEngine.Random;
 
 public class PlatformScaler : MonoBehaviour
 {
-    [SerializeField] private float minPlatformLength = 10;
-    [SerializeField] private float maxPlatformLength = 20;
+    [SerializeField] private float _minPlatformLength = 10;
+    [SerializeField] private float _maxPlatformLength = 20;
 
-    private float platformHeight = 2;
-    private float platformWidth = 2;
+    private float _platformHeight = 2;
+    private float _platformWidth = 2;
 
-    [SerializeField] private float minGapLength = 5;
-    [SerializeField] private float maxGapLength = 15;
+    [SerializeField] private float _minGapLength = 5;
+    [SerializeField] private float _maxGapLength = 15;
 
-    [SerializeField] private bool rescaleWithComplication = false;
-    [SerializeField] private float step = 2;
+    [SerializeField] private bool _rescaleWithComplication = false;
+    [SerializeField] private float _step = 2;
 
-    private DifficultyController difficulty;
-    private int currentDifficultyLevel;
+    private DifficultyController _difficulty;
+    private int _currentDifficultyLevel;
 
     public float GetRequiredGapLength()
     {
-        return minGapLength;
+        return _minGapLength;
     }
 
     public Vector3 ProduceGap()
     {
-        return new Vector3(Random.Range(minGapLength, maxGapLength), 0, 0);
+        return new Vector3(Random.Range(_minGapLength, _maxGapLength), 0, 0);
     }
 
     public Vector3 ProducePlatformScale(float minLength)
     {
         return ProducePlatformScaleImpl(
-            Mathf.Max(minLength, minPlatformLength),
-            maxPlatformLength);
+            Mathf.Max(minLength, _minPlatformLength),
+            _maxPlatformLength);
     }
 
     public Vector3 ProducePlatformScale(float minLength, float maxLength)
     {
         // keeping platforms in defined boundaries
         return ProducePlatformScaleImpl(
-            Mathf.Max(minLength, minPlatformLength),
-            Mathf.Min(maxLength, maxPlatformLength));
+            Mathf.Max(minLength, _minPlatformLength),
+            Mathf.Min(maxLength, _maxPlatformLength));
     }
 
     private Vector3 ProducePlatformScaleImpl(float minLength, float maxLength)
     {
-        return new Vector3(Random.Range(minLength, maxLength), platformHeight, platformWidth);
+        return new Vector3(Random.Range(minLength, maxLength), _platformHeight, _platformWidth);
     }
 
     void Start()
     {
-        difficulty = GetComponentInParent<DifficultyController>();
-        currentDifficultyLevel = difficulty.level;
+        _difficulty = GetComponentInParent<DifficultyController>();
+        _currentDifficultyLevel = _difficulty.Level;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (rescaleWithComplication && currentDifficultyLevel < difficulty.level)
+        if (_rescaleWithComplication && _currentDifficultyLevel < _difficulty.Level)
         {
-            currentDifficultyLevel = difficulty.level;
+            _currentDifficultyLevel = _difficulty.Level;
             Rescale();
         }
     }
@@ -67,7 +67,7 @@ public class PlatformScaler : MonoBehaviour
     private void Rescale()
     {
         // now length reducing is restricted by level count, but eventually one might need absolute extremums
-        minPlatformLength -= step;
-        maxPlatformLength -= step / 2;
+        _minPlatformLength -= _step;
+        _maxPlatformLength -= _step / 2;
     }
 }

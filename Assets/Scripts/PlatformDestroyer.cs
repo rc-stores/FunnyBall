@@ -2,12 +2,11 @@ using UnityEngine;
 
 public class PlatformDestroyer : MonoBehaviour
 {
-    [SerializeField] private float horizontalTerminalValue;
+    [SerializeField] private float _horizontalTerminalValue = -50;
 
     void Update()
     {
-        // todov remove the magic number
-        if (gameObject.transform.position.x <= horizontalTerminalValue)
+        if (gameObject.transform.position.x <= _horizontalTerminalValue)
         {
             Destroy(gameObject);
         }

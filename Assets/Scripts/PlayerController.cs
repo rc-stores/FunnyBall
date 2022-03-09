@@ -3,32 +3,33 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private LayerMask groundLayerMask;
-    [SerializeField] private GameObject levelGO;
-    [SerializeField] private RectTransform pauseButtonRectTF;
+    [SerializeField] private LayerMask _groundLayerMask;
+    [SerializeField] private GameObject _levelGO;
+    [SerializeField] private RectTransform _pauseButtonRectTF;
 
-    [SerializeField] private float vericalGravityCoefficient = 800;
+    [SerializeField] private float _vericalGravityCoefficient = 800;
 
-    private int gravitySign = -1;
-    private bool reverseGravity;
+    private int _gravitySign = -1;
+    private bool _reverseGravity;
 
-    private Vector3 lowerPosition;
-    private Vector3 upperPosition;
+    private Vector3 _lowerPosition;
+    private Vector3 _upperPosition;
+
+    private const float GAME_OVER_VERT_OFFSET = 4f;
 
     // Start is called before the first frame update
     void Start()
     {
-        Physics.gravity = new Vector3(0, vericalGravityCoefficient * gravitySign, 0);
-        lowerPosition = transform.position;
-        upperPosition = lowerPosition + levelGO.GetComponent<LevelGenerator>().GetVerticalOffset();
+        Physics.gravity = new Vector3(0, _vericalGravityCoefficient * _gravitySign, 0);
+        _lowerPosition = transform.position;
+        _upperPosition = _lowerPosition + _levelGO.GetComponent<LevelGenerator>().GetVerticalOffset();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.y < lowerPosition.y - 4f || transform.position.y > upperPosition.y + 4f)
+        if (transform.position.y < _lowerPosition.y - GAME_OVER_VERT_OFFSET || transform.position.y > _upperPosition.y + GAME_OVER_VERT_OFFSET)
         {
-            Debug.Log(transform.position.y + " " + lowerPosition.y);
             FindObjectOfType<GameManager>().EndGame();
             return;
         }
@@ -38,17 +39,17 @@ public class PlayerController : MonoBehaviour
             // a quick fix for debugging w/o a smartphone
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                reverseGravity = true;
+                _reverseGravity = true;
             }
             else if (Input.touchCount > 0)
             {
                 Touch touch = Input.GetTouch(0);
 
                 if (touch.phase == TouchPhase.Began &&
-                    GameManager.gameIsActive &&
-                    !RectTransformUtility.RectangleContainsScreenPoint(pauseButtonRectTF, touch.position))
+                    GameManager.GameIsActive &&
+                    !RectTransformUtility.RectangleContainsScreenPoint(_pauseButtonRectTF, touch.position))
                 {
-                    reverseGravity = true;
+                    _reverseGravity = true;
                 }
             }
         }
@@ -56,22 +57,22 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (reverseGravity)
+        if (_reverseGravity)
         {
             ReverseGravity();
-            reverseGravity = false;
+            _reverseGravity = false;
         }
     }
 
     private bool IsGrounded()
     {
         // there is a little bug here: after falling in a gap there is a chance to reverse gravity and land on a platform "upside down"
-        return Physics.OverlapSphere(transform.position, transform.localScale.x / 2 + 0.1f, groundLayerMask).Length > 0;
+        return Physics.OverlapSphere(transform.position, transform.localScale.x / 2 + 0.1f, _groundLayerMask).Length > 0;
     }
 
     private void ReverseGravity()
     {
-        gravitySign *= -1;
-        Physics.gravity = new Vector3(0, vericalGravityCoefficient * gravitySign, 0);
+        _gravitySign *= -1;
+        Physics.gravity = new Vector3(0, _vericalGravityCoefficient * _gravitySign, 0);
     }
 }

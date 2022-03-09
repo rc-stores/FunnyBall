@@ -687,8 +687,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd5c3b61f1a88c94dadd824a35b0537e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenu: {fileID: 1544510777}
-  gameOverMenu: {fileID: 1275881757}
+  _pauseMenuGO: {fileID: 1544510777}
+  _gameOverMenuGO: {fileID: 1275881757}
 --- !u!4 &323046020
 Transform:
   m_ObjectHideFlags: 0
@@ -1208,7 +1208,6 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
-  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1282,19 +1281,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &963194229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55233f17339a650429876f8becca7af5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 1592684460}
 --- !u!1 &1039387272
 GameObject:
   m_ObjectHideFlags: 0
@@ -2777,14 +2763,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7be87eeafacf04a4b9e0697c7e4b20e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask:
+  _groundLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  level: {fileID: 1795129924}
-  gameOverMenu: {fileID: 1275881757}
-  scoreText: {fileID: 115276318}
-  pauseButton: {fileID: 1086446396}
-  vericalGravityCoefficient: 800
+  _levelGO: {fileID: 1795129924}
+  _pauseButtonRectTF: {fileID: 1086446396}
+  _vericalGravityCoefficient: 800
 --- !u!114 &1592684462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2797,10 +2781,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36c30fba3f1b76a488803d65eb7f2345, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 115276320}
-  menuScoreText: {fileID: 1191577824}
-  highScoreText: {fileID: 839696201}
-  scoreStep: 1
+  _scoreText: {fileID: 115276320}
+  _menuScoreText: {fileID: 1191577824}
+  _highScoreText: {fileID: 839696201}
+  _scoreStep: 1
 --- !u!1 &1611724697
 GameObject:
   m_ObjectHideFlags: 0
@@ -2970,9 +2954,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e090259c01871c4c8b277336125fcdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kMaxSpeed: 0.8
-  speedStep: 0.05
-  timeStep: 40
+  _maxSpeed: 0.8
+  _speedStep: 0.05
+  _timeStep: 40
 --- !u!114 &1795129928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2985,12 +2969,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3cff66df8f69244cb12607bc2b5eb28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minPlatformLength: 10
-  maxPlatformLength: 20
-  minGapLength: 5
-  maxGapLength: 15
-  rescaleWithComplication: 0
-  step: 2
+  _minPlatformLength: 10
+  _maxPlatformLength: 20
+  _minGapLength: 5
+  _maxGapLength: 15
+  _rescaleWithComplication: 0
+  _step: 2
 --- !u!1 &1806245583
 GameObject:
   m_ObjectHideFlags: 0
@@ -3127,6 +3111,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1806245583}
   m_CullTransparentMesh: 1
+--- !u!4 &1815480337 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2027098316698576353, guid: ce63a11b5f559624abe977ed9c8cf9ee,
+    type: 3}
+  m_PrefabInstance: {fileID: 1784034506}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1884773570
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3470,6 +3460,12 @@ PrefabInstance:
       objectReference: {fileID: 4963035350565270003}
     - target: {fileID: 4963035351214568372, guid: b00ccb91853bd2d4b875f4f2f548effb,
         type: 3}
+      propertyPath: _platformPrefabTF
+      value: 
+      objectReference: {fileID: 2027098316698576353, guid: ce63a11b5f559624abe977ed9c8cf9ee,
+        type: 3}
+    - target: {fileID: 4963035351214568372, guid: b00ccb91853bd2d4b875f4f2f548effb,
+        type: 3}
       propertyPath: lastLowerPlatform
       value: 
       objectReference: {fileID: 1245370806}
@@ -3478,6 +3474,16 @@ PrefabInstance:
       propertyPath: lastUpperPlatform
       value: 
       objectReference: {fileID: 1480551413}
+    - target: {fileID: 4963035351214568372, guid: b00ccb91853bd2d4b875f4f2f548effb,
+        type: 3}
+      propertyPath: _lastLowerPlatformTF
+      value: 
+      objectReference: {fileID: 1245370806}
+    - target: {fileID: 4963035351214568372, guid: b00ccb91853bd2d4b875f4f2f548effb,
+        type: 3}
+      propertyPath: _lastUpperPlatformTF
+      value: 
+      objectReference: {fileID: 1815480337}
     - target: {fileID: 4963035351214568374, guid: b00ccb91853bd2d4b875f4f2f548effb,
         type: 3}
       propertyPath: m_Name

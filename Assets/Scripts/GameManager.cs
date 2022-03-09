@@ -3,44 +3,46 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static bool gameIsActive { get; private set; }
+    public static bool GameIsActive { get; private set; }
 
-    [SerializeField] private GameObject pauseMenuGO;
-    [SerializeField] private GameObject gameOverMenuGO;
+    [SerializeField] private GameObject _pauseMenuGO;
+    [SerializeField] private GameObject _gameOverMenuGO;
+
+    private const string GAME_SCENE_NAME = "Game";
 
     // workaround for restarting the level
     private void Awake()
     {
         Time.timeScale = 1;  
-        gameIsActive = true;
+        GameIsActive = true;
     }
 
     public void PauseGame()
     {
-        gameIsActive = false;
+        GameIsActive = false;
         Time.timeScale = 0;
-        pauseMenuGO.SetActive(true);
+        _pauseMenuGO.SetActive(true);
     }
 
     public void Restart()
     {
-        SceneManager.LoadScene("Game");
-        gameOverMenuGO.SetActive(false);
-        gameIsActive = true;
+        SceneManager.LoadScene(GAME_SCENE_NAME);
+        _gameOverMenuGO.SetActive(false);
+        GameIsActive = true;
     }
 
     public void Resume()
     {
         Time.timeScale = 1;
-        pauseMenuGO.SetActive(false);
-        gameIsActive = true;
+        _pauseMenuGO.SetActive(false);
+        GameIsActive = true;
     }
 
     public void EndGame()
     {
-        gameIsActive = false;
+        GameIsActive = false;
         Time.timeScale = 0;
-        gameOverMenuGO.SetActive(true);
+        _gameOverMenuGO.SetActive(true);
     }
 
     public void Quit()

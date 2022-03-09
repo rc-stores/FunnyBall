@@ -2,18 +2,18 @@ using UnityEngine;
 
 public class PlatformMover : MonoBehaviour
 {
-    private DifficultyController difficulty; 
-    private Vector3 direction;
+    private DifficultyController _difficulty; 
+    private Vector3 _direction;
 
     private void Start()
     {
-        difficulty = GetComponentInParent<DifficultyController>();
-        direction = new Vector3(-1, 0, 0);
+        _difficulty = GetComponentInParent<DifficultyController>();
+        _direction = new Vector3(-1, 0, 0);
     }
 
     private void FixedUpdate()
     {
-        transform.Translate(direction.normalized * difficulty.speed);
+        transform.Translate(_direction.normalized * _difficulty.Speed);
     }
 
 }

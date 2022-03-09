@@ -2,25 +2,25 @@ using UnityEngine;
 
 public class DifficultyController : MonoBehaviour
 {
-    public float speed { get; private set; } = 0.2f;
+    public float Speed { get; private set; } = 0.2f;
 
-    public int level { get; private set; } = 1;
+    public int Level { get; private set; } = 1;
 
-    [SerializeField] private float kMaxSpeed = 0.8f;
-    [SerializeField] private float speedStep = 0.05f;
+    [SerializeField] private float _maxSpeed = 0.8f;
+    [SerializeField] private float _speedStep = 0.05f;
 
-    [SerializeField] private float timeStep = 40; // the difficulty increases every 40 seconds
+    [SerializeField] private float _timeStep = 40; // the difficulty increases every 40 seconds
 
-    private float time = 0;
+    private float _time = 0;
     private const int MAX_LEVEL = 5;
 
     void Update()
     {
         // since the chance that a frame appears exactly in the step time is extremely small, 
         // we can't compare a modulus with zero
-        float oldModulus = time % timeStep;
-        time += Time.deltaTime;
-        if (oldModulus > time % timeStep && level < MAX_LEVEL)
+        float oldModulus = _time % _timeStep;
+        _time += Time.deltaTime;
+        if (oldModulus > _time % _timeStep && Level < MAX_LEVEL)
         {
             IncreaseDifficulty();
         }
@@ -28,10 +28,10 @@ public class DifficultyController : MonoBehaviour
 
     private void IncreaseDifficulty()
     {
-        if (speed < kMaxSpeed)
+        if (Speed < _maxSpeed)
         {
-            speed += speedStep;
+            Speed += _speedStep;
         }
-        ++level;
+        ++Level;
     }
 }

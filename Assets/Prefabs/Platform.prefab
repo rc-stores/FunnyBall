@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a1206bb6951c9741aa269c9603e7f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalTerminalValue: -50
+  _horizontalTerminalValue: -50
 --- !u!54 &4568481329711142263
 Rigidbody:
   m_ObjectHideFlags: 0
