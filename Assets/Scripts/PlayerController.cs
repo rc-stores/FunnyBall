@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask _groundLayerMask;
     [SerializeField] private GameObject _levelGO;
     [SerializeField] private RectTransform _pauseButtonRectTF;
+    [SerializeField] private GameManager _gameManager;
 
     [SerializeField] private float _vericalGravityCoefficient = 800;
 
@@ -30,7 +31,7 @@ public class PlayerController : MonoBehaviour
     {
         if (transform.position.y < _lowerPosition.y - GAME_OVER_VERT_OFFSET || transform.position.y > _upperPosition.y + GAME_OVER_VERT_OFFSET)
         {
-            FindObjectOfType<GameManager>().EndGame();
+            _gameManager.EndGame();
             return;
         }
 

@@ -2768,6 +2768,7 @@ MonoBehaviour:
     m_Bits: 8
   _levelGO: {fileID: 1795129924}
   _pauseButtonRectTF: {fileID: 1086446396}
+  _gameManager: {fileID: 323046019}
   _vericalGravityCoefficient: 800
 --- !u!114 &1592684462
 MonoBehaviour:
