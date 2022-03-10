@@ -3,15 +3,13 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private LayerMask _groundLayerMask;
     [SerializeField] private GameObject _levelGO;
     [SerializeField] private RectTransform _pauseButtonRectTF;
     [SerializeField] private GameManager _gameManager;
 
-    [SerializeField] private float _vericalGravityCoefficient = 800;
-
-    private int _gravitySign = -1;
-    private bool _reverseGravity;
+    [SerializeField] private float _verticalShift = 2f;
+    private Vector3 _direction = Vector3.down;
+    private bool _isGrounded = false;
 
     private Vector3 _lowerPosition;
     private Vector3 _upperPosition;
@@ -21,7 +19,6 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Physics.gravity = new Vector3(0, _vericalGravityCoefficient * _gravitySign, 0);
         _lowerPosition = transform.position;
         _upperPosition = _lowerPosition + _levelGO.GetComponent<LevelGenerator>().GetVerticalOffset();
     }
@@ -35,12 +32,13 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (IsGrounded())
+        if (_isGrounded)
         {
             // a quick fix for debugging w/o a smartphone
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                _reverseGravity = true;
+                _isGrounded = false;
+                _direction.y *= -1;
             }
             else if (Input.touchCount > 0)
             {
@@ -50,7 +48,9 @@ public class PlayerController : MonoBehaviour
                     GameManager.GameIsActive &&
                     !RectTransformUtility.RectangleContainsScreenPoint(_pauseButtonRectTF, touch.position))
                 {
-                    _reverseGravity = true;
+                    _isGrounded = false;
+                    _direction.y *= -1;
+
                 }
             }
         }
@@ -58,22 +58,26 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_reverseGravity)
+        if (!_isGrounded)
         {
-            ReverseGravity();
-            _reverseGravity = false;
+            transform.Translate(_direction.normalized * _verticalShift);
         }
     }
 
-    private bool IsGrounded()
+    private void OnTriggerEnter(Collider collider)
     {
-        // there is a little bug here: after falling in a gap there is a chance to reverse gravity and land on a platform "upside down"
-        return Physics.OverlapSphere(transform.position, transform.localScale.x / 2 + 0.1f, _groundLayerMask).Length > 0;
+        _isGrounded = true;
+        Transform platformTF = collider.transform;
+        float offsetSign = _direction.y * -1;
+        float offset = platformTF.localScale.y / 2 + transform.localScale.y / 2;
+        transform.position = new Vector3(
+            transform.position.x,
+            platformTF.position.y + offset * offsetSign,
+            transform.position.z);
     }
 
-    private void ReverseGravity()
+    private void OnTriggerExit(Collider collider)
     {
-        _gravitySign *= -1;
-        Physics.gravity = new Vector3(0, _vericalGravityCoefficient * _gravitySign, 0);
+        _isGrounded = false;
     }
 }
